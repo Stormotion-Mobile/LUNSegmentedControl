@@ -7,7 +7,7 @@ Please check this [article]() on our blog.
 Purpose
 -------
 
-LUNSegmentedControl is control designed
+LUNSegmentedControl is control designed to let developers use segmented control with custom appearance, customizable interactive animation and other pretty things like gradient for states and shadow.
 
 ![Gif animation]()
 
