@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIView *leftLimiterView;
 @property (nonatomic, strong) UIView *rightLimiterView;
 @property (nonatomic, strong) UIView *gradientViewContainer;
+@property (nonatomic, strong) UIView *shadowView;
 @property (nonatomic, strong) LUNGradientView *gradientView;
 @property (nonatomic, strong) NSMutableArray <UIView *> *stateViewContainers;
 @property (nonatomic, strong) NSMutableArray <UIView *> *stateViews;
@@ -95,6 +96,7 @@
     [self initLeftLimiterView];
     [self initRightLimiterView];
     [self initGradientView];
+    [self initShadowView];
     [self initTapGestureRecognizers];
 }
 - (void)initScrollView {
@@ -168,6 +170,23 @@
     self.gradientView.translatesAutoresizingMaskIntoConstraints = NO;
     [fakeView addSubview:self.gradientView];
     self.gradientViewContainer = fakeView;
+}
+- (void)initShadowView {
+    self.shadowView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.shadowView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.shadowView.layer.masksToBounds = NO;
+    self.shadowView.backgroundColor = [UIColor clearColor];
+    self.shadowView.userInteractionEnabled = NO;
+    [self addSubview:self.shadowView];
+    [self setupViewConstraints:self.shadowView withContainer:self];
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.shadowView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
+    [self addConstraint:constraint];
+    constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.shadowView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
+    [self addConstraint:constraint];
+    constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.shadowView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    [self addConstraint:constraint];
+    constraint = [NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.shadowView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
+    [self addConstraint:constraint];
 }
 
 #pragma mark - Setup constraints
@@ -586,27 +605,27 @@
 }
 
 #pragma mark - Shadow
-- (UIColor *)shadowСolorForStateAtIndex:(NSInteger)index {
+- (UIColor *)shadowColorForStateAtIndex:(NSInteger)index {
     if ([self dataSourceProvideGradient]) {
         return [self.dataSource segmentedControl:self gradientColorsForStateAtIndex:index].firstObject;
     }
     return self.selectorViewColor;
 }
 - (void)setupShadowForStateAtIndex:(NSInteger)index visible:(BOOL)visible animated:(BOOL)animated {
-    self.layer.shadowColor = [self shadowСolorForStateAtIndex:index].CGColor;
-    self.layer.shadowRadius = 7.0;
-    self.layer.shadowOffset = CGSizeMake(0, 5);
+    self.shadowView.layer.shadowColor = [self shadowColorForStateAtIndex:index].CGColor;
+    self.shadowView.layer.shadowRadius = 7.0;
+    self.shadowView.layer.shadowOffset = CGSizeMake(0, 5);
     CGAffineTransform transform = CGAffineTransformMakeTranslation(self.stateViews[index].bounds.size.width * [self percentFromOffset:[self offsetFromState:index]], 0);
-    self.layer.shadowPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:0], &transform);
+    self.shadowView.layer.shadowPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:0], &transform);
     if (animated) {
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
         animation.duration = visible?self.shadowShowDuration:self.shadowHideDuration;
         animation.toValue = @(visible ? 0.7 : 0.0);
         animation.fillMode = kCAFillModeForwards;
         animation.removedOnCompletion = NO;
-        [self.layer addAnimation:animation forKey:nil];
+        [self.shadowView.layer addAnimation:animation forKey:nil];
     } else {
-        self.layer.shadowOpacity = visible ? 0.7 : 0.0;
+        self.shadowView.layer.shadowOpacity = visible ? 0.7 : 0.0;
     }
 }
 
