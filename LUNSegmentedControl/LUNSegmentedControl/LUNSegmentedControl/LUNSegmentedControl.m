@@ -76,6 +76,9 @@
 
 #pragma mark - Init defaults
 - (void)initDefaults {
+    self.textColor = [UIColor blackColor];
+    self.selectedStateTextColor = [UIColor whiteColor];
+    self.selectorViewColor = [UIColor greenColor];
     self.textFont = [UIFont systemFontOfSize:14];
     self.transitionStyle = LUNSegmentedControlTransitionStyleFade;
     self.shapeStyle = LUNSegmentedControlShapeStyleLiquid;
