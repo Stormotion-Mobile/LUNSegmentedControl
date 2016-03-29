@@ -809,8 +809,7 @@
     [self setCurrentState:currentState animated:NO];
 }
 - (void)setCurrentState:(NSInteger)currentState animated:(BOOL)animated {
-    NSInteger count = self.statesCount;
-    NSAssert(currentState < count && currentState >= 0, @"Unable to set state %li. Segmented control has only %li states from 0 to %li.",(long)currentState, (long)count, (long)(count-1));
+    NSAssert(currentState < self.statesCount && currentState >= 0, @"Unable to set state %li. Segmented control has only %li states from 0 to %li.",(long)currentState, (long)self.statesCount, (long)(self.statesCount-1));
     if (!animated) {
         _currentState = currentState;
         if (self.shadowsEnabled) {
