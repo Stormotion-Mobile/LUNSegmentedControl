@@ -10,6 +10,7 @@
 @class LUNSegmentedControl;
 
 typedef NS_ENUM(NSUInteger, LUNSegmentedControlTransitionStyle) {
+    LUNSegmentedControlTransitionStyleNone = 0,
     LUNSegmentedControlTransitionStyleSlide,
     LUNSegmentedControlTransitionStyleFade
 };

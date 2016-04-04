@@ -518,10 +518,6 @@
     if (percent < 1 && percent > -1) {
         [self.changedViews addObject:@(index)];
     }
-    if ([self.delegate respondsToSelector:@selector(segmentedControl:setupStateAtIndex:stateView:selectedView:withSelectionPercent:)]) {
-        [self.delegate segmentedControl:self setupStateAtIndex:index stateView:self.stateViewContainers[index] selectedView:self.selectedStateViewContainers[index] withSelectionPercent:percent];
-        return ;
-    }
     switch (self.transitionStyle) {
         case LUNSegmentedControlTransitionStyleFade: {
             self.selectedStateViewContainers[index].alpha = 1 - fabs(percent);
@@ -541,6 +537,9 @@
             
         default:
             break;
+    }
+    if ([self.delegate respondsToSelector:@selector(segmentedControl:setupStateAtIndex:stateView:selectedView:withSelectionPercent:)]) {
+        [self.delegate segmentedControl:self setupStateAtIndex:index stateView:self.stateViewContainers[index] selectedView:self.selectedStateViewContainers[index] withSelectionPercent:percent];
     }
 }
 - (void)deselectStateViewAtIndex:(NSInteger)index {
