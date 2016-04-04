@@ -607,7 +607,7 @@
 }
 
 #pragma mark - Shadow
-- (UIColor *)shadowСolorForStateAtIndex:(NSInteger)index {
+- (UIColor *)shadowColorForStateAtIndex:(NSInteger)index {
     if ([self dataSourceProvideGradient]) {
         return [self.dataSource segmentedControl:self gradientColorsForStateAtIndex:index].firstObject;
     }
