@@ -2,14 +2,14 @@
 
 [![Crafted in LunApps](https://lunapps.com/img/crafted-in-lunapps.png)](https://lunapps.com/)
 
-Please check this [article]() on our blog.
+Please check this [article](https://lunapps.com/blog/lunsegmentedcontrol/) on our blog.
 
 Purpose
 -------
 
 LUNSegmentedControl is control designed to let developers use segmented control with custom appearance, customizable interactive animation and other pretty things like gradient for states and shadow.
 
-![Gif animation]()
+![](https://i2.wp.com/lunapps.com/blog/wp-content/uploads/2016/03/switcher_animation.gif)
 
 Supported OS & SDK Versions
 ---------------------------
@@ -29,7 +29,7 @@ To use the LUNSegmentedControl in your app, just drag the LUNSegmentedControl fo
 Or you can use CocoaPods 
 
 ```ruby
-pod 'LUNSegmentedControl', '~> 1.0.0'
+pod 'LUNSegmentedControl'
 ```
 
 Usage
