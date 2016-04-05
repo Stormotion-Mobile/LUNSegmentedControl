@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 
 /**
- *  Category of UIView that provide method to remove set of constraints from view subtree.
+ *  @brief Category of UIView that provide method to remove set of constraints from view subtree.
  */
 @interface UIView (LUNRemoveConstraints)
 
 /**
- *  Remove specified set of constraints from views in receiver subtree and from receiver itself.
+ *  @brief Remove specified set of constraints from views in receiver subtree and from receiver itself.
  *
  *  @param constraints Set of constraints to remove.
  */

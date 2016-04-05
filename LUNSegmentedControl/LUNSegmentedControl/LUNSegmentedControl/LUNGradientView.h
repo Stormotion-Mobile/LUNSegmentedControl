@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- *  View with CAGradientLayer layer class.
+ *  @brief View with CAGradientLayer layer class.
  */
 @interface LUNGradientView : UIView
 
