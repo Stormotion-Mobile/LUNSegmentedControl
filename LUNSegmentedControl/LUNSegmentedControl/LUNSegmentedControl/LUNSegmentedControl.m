@@ -556,7 +556,6 @@
     selectedView.layer.mask = nil;
     if ([self.delegate respondsToSelector:@selector(segmentedControl:resetStateAtIndex:stateView:selectedView:)]) {
         [self.delegate segmentedControl:self resetStateAtIndex:index stateView:stateView selectedView:selectedView];
-        return ;
     }
 }
 - (void)setupStateViewsWithCount:(NSInteger)count {
