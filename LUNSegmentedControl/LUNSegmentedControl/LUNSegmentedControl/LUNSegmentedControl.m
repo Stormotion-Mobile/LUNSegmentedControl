@@ -829,6 +829,10 @@
     [self setCurrentState:currentState animated:NO];
 }
 - (void)setCurrentState:(NSInteger)currentState animated:(BOOL)animated {
+    if (!self.dataSource) {
+        NSLog(@"Warning! Data source of segmented control:%@ wasn't set. In order to use segmented control set its data source.",self);
+        return ;
+    }
     NSAssert(currentState < self.statesCount && currentState >= 0, @"Unable to set state %li. Segmented control has only %li states from 0 to %li.",(long)currentState, (long)self.statesCount, (long)(self.statesCount-1));
     if (!animated) {
         _currentState = currentState;
