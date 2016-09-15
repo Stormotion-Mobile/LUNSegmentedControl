@@ -51,7 +51,6 @@
     return self;
 }
 - (void)baseInit {
-    self.translatesAutoresizingMaskIntoConstraints = NO;
     self.clipsToBounds = YES;
     self.layer.masksToBounds = NO;
     self.stateViews = [[NSMutableArray alloc] init];
