@@ -382,7 +382,10 @@
     }
     self.gradientViewLeftConstraint.constant = (-1 - offsetFactor * self.statesCount) * self.selectorView.bounds.size.width * (1 + self.gradientBackVelocity) + self.selectorView.bounds.size.width * offsetFactor * self.statesCount;
     CGAffineTransform transform = CGAffineTransformMakeTranslation(-self.gradientViewLeftConstraint.constant + self.selectorView.bounds.size.width * offsetFactor * self.statesCount, 0);
-    ((CAShapeLayer *)self.gradientView.layer.mask).path = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:percent], &transform);
+    
+    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:percent], &transform);
+    ((CAShapeLayer *)self.gradientView.layer.mask).path = transformedPath;
+    CGPathRelease(transformedPath);
 }
 - (void)setupGradientViewWithCount:(NSInteger)count {
     if (![self dataSourceProvideGradient]) {
@@ -530,7 +533,9 @@
                 stateView.layer.mask = [CAShapeLayer layer];
             }
             CGAffineTransform transform = CGAffineTransformMakeTranslation(stateView.bounds.size.width * percent, 0);
-            ((CAShapeLayer *)stateView.layer.mask).path = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:percent], &transform);
+            CGPathRef transformedPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:percent], &transform);
+            ((CAShapeLayer *)stateView.layer.mask).path = transformedPath;
+            CGPathRelease(transformedPath);
             break;
         }
             
@@ -616,7 +621,9 @@
     self.shadowView.layer.shadowRadius = 7.0;
     self.shadowView.layer.shadowOffset = CGSizeMake(0, 5);
     CGAffineTransform transform = CGAffineTransformMakeTranslation(self.stateViews[index].bounds.size.width * [self percentFromOffset:[self offsetFromState:index]], 0);
-    self.shadowView.layer.shadowPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:0], &transform);
+    CGPathRef transformedPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:0], &transform);
+    self.shadowView.layer.shadowPath = transformedPath;
+    CGPathRelease(transformedPath);
     if (animated) {
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
         animation.duration = visible?self.shadowShowDuration:self.shadowHideDuration;
