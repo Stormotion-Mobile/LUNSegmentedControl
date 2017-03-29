@@ -20,13 +20,25 @@ LUNSegmentedControl requires ARC.
 Installation
 ------------
 
-To use the LUNSegmentedControl in your app, just drag the LUNSegmentedControl folder into your project.
-
-Or you can use CocoaPods 
+#### CocoaPods
+You can use [CocoaPods](http://cocoapods.org/) to install `LUNSegmentedControl` by adding it to your `Podfile`:
 
 ```ruby
+platform :ios, '8.0'
+use_frameworks!
 pod 'LUNSegmentedControl'
 ```
+
+To get the full benefits import `LUNSegmentedControl` wherever you import UIKit
+
+``` swift
+import UIKit
+import LUNSegmentedControl
+```
+
+#### Manually
+1. Download and drop ```LUNSegmentedControl/LUNSegmentedControl/LUNSegmentedControl``` folder in your project.  
+2. Congratulations!  
 
 Usage
 -----
