@@ -617,9 +617,14 @@
     return self.selectorViewColor;
 }
 - (void)setupShadowForStateAtIndex:(NSInteger)index visible:(BOOL)visible animated:(BOOL)animated {
-    self.shadowView.layer.shadowColor = [self shadowColorForStateAtIndex:index].CGColor;
-    self.shadowView.layer.shadowRadius = 7.0;
-    self.shadowView.layer.shadowOffset = CGSizeMake(0, 5);
+    if ([self.delegate respondsToSelector:@selector(segmentedControl:setupShadowView:)]) {
+        [self.delegate segmentedControl:self setupShadowView:self.shadowView];
+    } else {
+        self.shadowView.layer.shadowColor = [self shadowColorForStateAtIndex:index].CGColor;
+        self.shadowView.layer.shadowRadius = 7.0;
+        self.shadowView.layer.shadowOffset = CGSizeMake(0, 5);
+    }
+
     CGAffineTransform transform = CGAffineTransformMakeTranslation(self.stateViews[index].bounds.size.width * [self percentFromOffset:[self offsetFromState:index]], 0);
     CGPathRef transformedPath = CGPathCreateCopyByTransformingPath([self pathForSelectorViewFromPercentage:0], &transform);
     self.shadowView.layer.shadowPath = transformedPath;

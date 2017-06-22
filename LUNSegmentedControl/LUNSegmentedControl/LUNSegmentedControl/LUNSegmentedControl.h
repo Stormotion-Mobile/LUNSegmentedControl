@@ -103,6 +103,13 @@ typedef NS_ENUM(NSUInteger, LUNSegmentedControlBounce) {
  *  @see segmentedControl:setupStateAtIndex:stateView:selectedView:withSelectionPercent:
  */
 - (void)segmentedControl:(LUNSegmentedControl *)segmentedControl resetStateAtIndex:(NSInteger)stateIndex stateView:(UIView *)stateView selectedView:(UIView *)selectedView;
+/**
+ *  @brief Asks the delegate to setup shadow.
+ *
+ *  @param segmentedControl LUNSegmentedControl instance that asks delegate.
+ *  @param shadowView       Shadow view.
+ */
+- (void)segmentedControl:(LUNSegmentedControl *)segmentedControl setupShadowView:(UIView *)shadowView;
 
 @end
 
