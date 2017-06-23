@@ -229,6 +229,10 @@ typedef NS_ENUM(NSUInteger, LUNSegmentedControlBounce) {
  */
 @property (nonatomic, assign) LUNSegmentedControlShapeStyle shapeStyle;
 /**
+ *  @brief Duration of transition between selected and unselected state of segments.
+ */
+@property (nonatomic, assign) CGFloat transitionDuration;
+/**
  *  @brief Corner radius of control.
  */
 @property (nonatomic, assign) IBInspectable CGFloat cornerRadius;

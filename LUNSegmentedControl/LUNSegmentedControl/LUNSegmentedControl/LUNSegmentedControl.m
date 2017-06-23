@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *addedConstraintsToRemove;
 @property (nonatomic, assign) BOOL viewWasLayoutSubviews;
 @property (nonatomic, assign) BOOL layoutDependentValuesWasUpdated;
+@property (nonatomic, strong) CADisplayLink *scrollViewAnimationDisplayLink;
 
 @end
 
@@ -787,30 +788,7 @@
     self.userInteractionEnabled = YES;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([self.delegate respondsToSelector:@selector(segmentedControl:didScrollWithXOffset:)]) {
-        [self.delegate segmentedControl:self didScrollWithXOffset:self.frame.size.width - self.scrollView.contentOffset.x - self.selectorView.frame.size.width];
-    }
-    if ([self offsetFromState:[self stateFromOffset:scrollView.contentOffset]].x != scrollView.contentOffset.x) {
-        [self setupShadowForStateAtIndex:self.currentState visible:NO animated:YES];
-    }
-    CGFloat percent = [self percentFromOffset:scrollView.contentOffset];
-    NSInteger leftIndex = [self leftStateIndexFromPercentage:percent];
-    NSInteger rightIndex = [self rightStateIndexFromPercentage:percent];
-    [self.changedViews minusSet:[self.changedViews objectsPassingTest:^BOOL(NSNumber * _Nonnull number, BOOL * _Nonnull stop) {
-        if (number.integerValue == leftIndex) return NO;
-        if (number.integerValue == rightIndex) return NO;
-        [self deselectStateViewAtIndex:number.integerValue];
-        return YES;
-    }]];
-    CGFloat factor = percent - floor(percent);
-    self.selectorViewPath = [self pathForSelectorViewFromPercentage:factor];
-    if (leftIndex >= 0 && leftIndex < self.statesCount) {
-        [self setupStateViewAtIndex:leftIndex withSelectionPercent:factor];
-    }
-    if (rightIndex >= 0 && rightIndex < self.statesCount) {
-        [self setupStateViewAtIndex:rightIndex withSelectionPercent:factor - 1];
-    }
-    [self setupGradientWithPercent:factor offsetFactor:percent / self.statesCount];
+    [self onScrollWithOffset:scrollView.contentOffset];
 }
 
 #pragma mark - Tap handling
@@ -846,7 +824,22 @@
             [self setupShadowForStateAtIndex:currentState visible:YES animated:NO];
         }
     }
-    [self.scrollView setContentOffset:[self offsetFromState:currentState] animated:animated];
+    CGPoint contentOffset = [self offsetFromState:currentState];
+    if (animated && self.transitionDuration > 0) {
+        self.scrollViewAnimationDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkTick)];
+        [self.scrollViewAnimationDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+
+        [UIView animateWithDuration:self.transitionDuration animations:^{
+            self.scrollView.contentOffset = contentOffset;
+        } completion:^(BOOL finished) {
+            [self.scrollViewAnimationDisplayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            self.scrollViewAnimationDisplayLink = nil;
+
+            [self scrollViewDidEndScrollingAnimation:self.scrollView];
+        }];
+    } else {
+        [self.scrollView setContentOffset:contentOffset animated:animated];
+    }
 }
 
 #pragma mark - Calculations
@@ -991,6 +984,37 @@
 }
 - (CGFloat)selectorViewWidthMultiplier {
     return 1.0 / self.statesCount;
+}
+- (void)onScrollWithOffset:(CGPoint)offset {
+    if ([self.delegate respondsToSelector:@selector(segmentedControl:didScrollWithXOffset:)]) {
+        [self.delegate segmentedControl:self didScrollWithXOffset:self.frame.size.width - offset.x - self.selectorView.frame.size.width];
+    }
+    if ([self offsetFromState:[self stateFromOffset:offset]].x != offset.x) {
+        [self setupShadowForStateAtIndex:self.currentState visible:NO animated:YES];
+    }
+    CGFloat percent = [self percentFromOffset:offset];
+    NSInteger leftIndex = [self leftStateIndexFromPercentage:percent];
+    NSInteger rightIndex = [self rightStateIndexFromPercentage:percent];
+    [self.changedViews minusSet:[self.changedViews objectsPassingTest:^BOOL(NSNumber * _Nonnull number, BOOL * _Nonnull stop) {
+        if (number.integerValue == leftIndex) return NO;
+        if (number.integerValue == rightIndex) return NO;
+        [self deselectStateViewAtIndex:number.integerValue];
+        return YES;
+    }]];
+    CGFloat factor = percent - floor(percent);
+    self.selectorViewPath = [self pathForSelectorViewFromPercentage:factor];
+    if (leftIndex >= 0 && leftIndex < self.statesCount) {
+        [self setupStateViewAtIndex:leftIndex withSelectionPercent:factor];
+    }
+    if (rightIndex >= 0 && rightIndex < self.statesCount) {
+        [self setupStateViewAtIndex:rightIndex withSelectionPercent:factor - 1];
+    }
+    [self setupGradientWithPercent:factor offsetFactor:percent / self.statesCount];
+}
+- (void)displayLinkTick {
+    CALayer *presentationLayer = (CALayer *)self.scrollView.layer.presentationLayer;
+    CGPoint contentOffset = presentationLayer.bounds.origin;
+    [self onScrollWithOffset:contentOffset];
 }
 
 #pragma mark - Liquid shape functions
