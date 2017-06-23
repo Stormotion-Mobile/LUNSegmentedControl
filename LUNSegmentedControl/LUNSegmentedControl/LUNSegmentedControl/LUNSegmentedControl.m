@@ -788,6 +788,10 @@
     self.userInteractionEnabled = YES;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.scrollViewAnimationDisplayLink) {
+        return;
+    }
+
     [self onScrollWithOffset:scrollView.contentOffset];
 }
 
