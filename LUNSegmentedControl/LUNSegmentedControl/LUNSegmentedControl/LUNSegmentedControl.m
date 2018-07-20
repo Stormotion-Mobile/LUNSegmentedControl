@@ -740,6 +740,14 @@
     _selectorViewColor = selectorViewColor;
     self.selectorView.backgroundColor = selectorViewColor;
 }
+- (void)setSelectorViewBorderWidth:(CGFloat)selectorViewBorderWidth {
+	_selectorViewBorderWidth = selectorViewBorderWidth;
+	self.selectorView.layer.borderWidth = selectorViewBorderWidth;
+}
+- (void)setSelectorViewBorderColor:(UIColor *)selectorViewBorderColor {
+	_selectorViewBorderColor = selectorViewBorderColor;
+	self.selectorView.layer.borderColor = selectorViewBorderColor.CGColor;
+}
 - (void)setCornerRadius:(CGFloat)cornerRadius {
     _cornerRadius = cornerRadius;
     self.layer.cornerRadius = cornerRadius;

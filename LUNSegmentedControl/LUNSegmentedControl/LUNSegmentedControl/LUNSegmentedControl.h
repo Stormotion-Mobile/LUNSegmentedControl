@@ -245,6 +245,14 @@ typedef NS_ENUM(NSUInteger, LUNSegmentedControlBounce) {
  */
 @property (nonatomic, strong) IBInspectable UIColor *selectorViewColor;
 /**
+ *  @brief Border width of selection.
+ */
+@property (nonatomic) IBInspectable CGFloat selectorViewBorderWidth;
+/**
+ *  @brief Border color of selection.
+ */
+@property (nonatomic, strong) IBInspectable UIColor *selectorViewBorderColor;
+/**
  *  @brief Text font applied to title in both selected and unselected state if data source does not provide attributed titles or views.
  */
 @property (nonatomic, strong) UIFont *textFont;
