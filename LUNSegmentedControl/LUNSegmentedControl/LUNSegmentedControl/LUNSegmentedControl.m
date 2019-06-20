@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSMutableArray <NSLayoutConstraint *> *addedConstraintsToRemove;
 @property (nonatomic, assign) BOOL viewWasLayoutSubviews;
 @property (nonatomic, assign) BOOL layoutDependentValuesWasUpdated;
+@property (nonatomic, assign) BOOL layoutAfterScrolling;
 
 @end
 
@@ -68,9 +69,10 @@
     [super layoutSubviews];
     [self layoutIfNeeded];
     self.viewWasLayoutSubviews = YES;
-    if (!self.layoutDependentValuesWasUpdated) {
+    if (!self.layoutDependentValuesWasUpdated || self.layoutAfterScrolling) {
         [self updateLayoutDependentValues];
     }
+    self.layoutAfterScrolling = YES;
 }
 
 #pragma mark - Init defaults
@@ -727,7 +729,10 @@
     }
 }
 - (void)updateLayoutDependentValues {
+    int state = self.currentState;
     self.currentState = 0;
+    self.currentState = self.statesCount-1;
+    self.currentState = state;
     self.layoutDependentValuesWasUpdated = YES;
 }
 
@@ -787,6 +792,7 @@
     self.userInteractionEnabled = YES;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.layoutAfterScrolling = NO;
     if ([self.delegate respondsToSelector:@selector(segmentedControl:didScrollWithXOffset:)]) {
         [self.delegate segmentedControl:self didScrollWithXOffset:self.frame.size.width - self.scrollView.contentOffset.x - self.selectorView.frame.size.width];
     }
