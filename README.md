@@ -1,9 +1,5 @@
 # LUNSegmentedControl
 
-[![Crafted in LunApps](https://lunapps.com/img/crafted-in-lunapps.png)](https://lunapps.com/)
-
-Please check this [article](https://lunapps.com/blog/lunsegmentedcontrol/) on our blog.
-
 Purpose
 -------
 
